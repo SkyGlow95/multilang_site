@@ -1,0 +1,136 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-06-20 17:11+0200\n"
+"PO-Revision-Date: 2024-06-16 16:00+0200\n"
+"Last-Translator: Yann <dcs.yann@gmail.com>\n"
+"Language-Team: French <fr@li.org>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: .\main\templates\base.html:47
+msgid "Accueil"
+msgstr "Accueil"
+
+#: .\main\templates\base.html:48
+msgid "Articles"
+msgstr "Articles"
+
+#: .\main\templates\base.html:50 .\main\templates\main\add_article.html:6
+#: .\main\templates\main\add_article.html:25
+msgid "Add Article"
+msgstr "Ajouter un article"
+
+#: .\main\templates\base.html:52
+msgid "Logout"
+msgstr "Se déconnecter"
+
+#: .\main\templates\base.html:63 .\main\templates\registration\login.html:7
+#: .\main\templates\registration\login.html:10
+#: .\main\templates\registration\login.html:14
+msgid "Login"
+msgstr "Se connecter"
+
+#: .\main\templates\base.html:86
+msgid "Chatbot"
+msgstr "Chatbot"
+
+#: .\main\templates\base.html:97 .\main\templates\main\article_detail.html:20
+msgid "Ask your question here"
+msgstr "Posez votre question ici"
+
+#: .\main\templates\base.html:150
+msgid "All rights reserved."
+msgstr "Tous droits réservés."
+
+#: .\main\templates\main\add_article.html:10
+msgid "Add a New Article"
+msgstr "Ajouter un nouvel article"
+
+#: .\main\templates\main\article_detail.html:17
+msgid "Ask a Question based on the article"
+msgstr "Posez une question basée sur l'article"
+
+#: .\main\templates\main\article_detail.html:21
+msgid "Ask"
+msgstr "Demander"
+
+#: .\main\templates\main\article_detail.html:26
+msgid "Question"
+msgstr "Question"
+
+#: .\main\templates\main\article_detail.html:28
+msgid "Answer"
+msgstr "Réponse"
+
+#: .\main\templates\main\article_detail.html:35
+msgid "Error"
+msgstr "Erreur"
+
+#: .\main\templates\main\article_list.html:6
+msgid "Article List"
+msgstr "Liste des articles"
+
+#: .\main\templates\main\article_list.html:12
+msgid "Articles Available"
+msgstr "Articles disponibles"
+
+#: .\main\templates\main\article_list.html:20
+msgid "Published on"
+msgstr "Publié le"
+
+#: .\main\templates\main\home.html:6
+msgid "Home"
+msgstr "Accueil"
+
+#: .\main\templates\main\home.html:12
+msgid "Welcome to the Multilingual Blog Site"
+msgstr "Bienvenue sur le site de blog multilingue"
+
+#: .\main\templates\main\home.html:13
+msgid "This is the home page."
+msgstr "Ceci est la page d'accueil."
+
+#: .\main\templates\main\home.html:14
+msgid "View Articles"
+msgstr "Voir les articles"
+
+#~ msgid "Ask a Question"
+#~ msgstr "Poser une question"
+
+#~ msgid "Available Articles"
+#~ msgstr "Articles disponibles"
+
+#~ msgid "Change language"
+#~ msgstr "Changer de langue"
+
+#~ msgid "Send"
+#~ msgstr "Envoyer"
+
+#~ msgid "Ask the Chatbot"
+#~ msgstr "Demandez au Chatbot"
+
+#~ msgid "Search"
+#~ msgstr "Recherche"
+
+#~ msgid "Search Articles"
+#~ msgstr "Rechercher des articles"
+
+#~ msgid "Enter your query"
+#~ msgstr "Entrez votre requête"
+
+#~ msgid "Results for"
+#~ msgstr "Résultats pour"
+
+#~ msgid "AI Augmented Answer"
+#~ msgstr "Réponse augmentée par l'IA"

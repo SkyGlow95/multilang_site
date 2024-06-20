@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block title %}
+{{ article.title }}
+{% endblock %}
+
+{% block content %}
+<div class="flex flex-col items-center justify-center min-h-screen mx-10 pt-16">
+    <h1 class="text-center">{{ article.title }}</h1>
+    <div class="w-full max-w-3xl text-left">{{ article.text|safe }}</div>
+    <div class="text-center mt-4">{{ article.published_date }}</div>
+</div>
+
+<div class="flex flex-col items-center justify-center bg-gray-100 pb-4">
+    <h2 class="text-2xl font-bold mb-4">{% trans "Ask a Question based on the article" %}</h2>
+    <form method="post" class="w-full max-w-lg bg-white p-6 rounded-lg shadow-md">
+        {% csrf_token %}
+        <textarea name="question" rows="4" class="w-full border border-gray-300 rounded-lg mb-4 p-0" style="resize: none;" placeholder="{% trans "Ask your question here" %}"></textarea>
+        <button type="submit" class="w-full bg-primary text-white font-bold py-2 rounded hover:bg-second transition mb-2 border-0 shadow-lg cursor-pointer">{% trans "Ask" %}</button>
+    </form>
+    
+    {% if question %}
+        <div class="mt-6 mb-3 bg-white p-6 rounded-lg shadow-md w-full max-w-lg">
+            <h2 class="text-xl font-semibold mb-2">{% trans "Question" %}:</h2>
+            <p class="mb-4">{{ question }}</p>
+            <h2 class="text-xl font-semibold mb-2">{% trans "Answer" %}:</h2>
+            <p>{{ response_text }}</p>
+        </div>
+    {% endif %}
+    
+    {% if error_message %}
+        <div class="mt-6 bg-white p-6 rounded-lg shadow-md w-full max-w-lg border border-red-500 text-red-500">
+            <h2 class="text-xl font-semibold mb-2">{% trans "Error" %}:</h2>
+            <p>{{ error_message }}</p>
+        </div>
+    {% endif %}
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block title %}
+{% trans "Article List" %}
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-100 pt-20 px-10">
+    <h1 class="text-3xl font-bold mb-6">
+        {{ articles|length }} {% trans "Articles Available" %}
+    </h1>
+    <ul class="list-none space-y-4 p-0">
+        {% for article in articles %}
+        <a href="{% url 'article_detail' article.id %}" class="block no-underline text-black">
+            <li class="bg-white p-4 rounded-lg shadow-md hover:bg-gray-100 transition">
+                <h2 class="text-xl font-semibold text-primary">{{ article.title }}</h2>
+                <p class="text-gray-500 text-sm mt-2">
+                    {% trans "Published on" %} {{ article.published_date|date:"F j, Y" }}
+                </p>
+            </li>
+        </a>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

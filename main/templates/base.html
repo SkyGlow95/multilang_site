@@ -1,0 +1,153 @@
+{% load i18n %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="{% get_current_language as LANGUAGE_CODE %}{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    <link href="{% static './css/output.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="font-sans flex flex-col bg-bg">
+    <!-- Navbar -->
+    <div class="fixed top-0 left-0 w-full bg-white text-base">
+        <div class="container mx-auto flex justify-between items-center">
+            <form id="language-form" action="{% url 'set_language' %}" method="post" class="flex items-center">
+                {% csrf_token %}
+                <input name="next" type="hidden" value="{{ request.path }}" />
+                <select name="language" class="px-3 py-2 rounded-lg border-0 cursor-pointer text-base" onchange="document.getElementById('language-form').submit();" style="padding-left: 3em;">
+                    {% for lang in LANGUAGES %}
+                        <option value="{{ lang.0 }}" data-flag-url="{% static 'img/flag_' %}{{ lang.0 }}.png" {% if lang.0 == LANGUAGE_CODE %}selected{% endif %}>
+                            {{ lang.0|upper }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </form>
+            
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    var select = document.querySelector('select[name="language"]');
+                    var selectedOption = select.options[select.selectedIndex];
+                    var flagUrl = selectedOption.getAttribute('data-flag-url');
+                    select.style.backgroundImage = 'url(' + flagUrl + ')';
+                    select.style.backgroundRepeat = 'no-repeat';
+                    select.style.backgroundSize = '2.2em';
+                    select.style.backgroundPosition = 'left 4px center';
+                    
+                    select.addEventListener('change', function() {
+                        var flagUrl = select.options[select.selectedIndex].getAttribute('data-flag-url');
+                        select.style.backgroundImage = 'url(' + flagUrl + ')';
+                    });
+                });
+            </script>            
+            
+            <nav class="my-1">
+                <ul class="flex list-none items-center">
+                    <li><a href="{% url 'home' %}" class="text-black no-underline animation-menu p-5">{% trans "Accueil" %}</a></li>
+                    <li><a href="{% url 'article_list' %}" class="text-black no-underline animation-menu p-5">{% trans "Articles" %}</a></li>
+                    {% if user.is_authenticated %}
+                    <li><a href="{% url 'add_article' %}" class="text-black no-underline animation-menu p-5">{% trans "Add Article" %}</a></li>
+                    <li>
+                        <a href="#" class="text-black no-underline animation-menu p-5" onclick="document.getElementById('logout-form').submit(); return false;">{% trans "Logout" %}</a>
+                        <form id="logout-form" action="{% url 'logout' %}" method="post" class="hidden">
+                            {% csrf_token %}
+                        </form>
+                        <script>
+                            function submitLogoutForm() {
+                                document.getElementById('logout-form').submit();
+                            }
+                        </script>
+                    </li>      
+                    {% else %}
+                    <li><a href="{% url 'login' %}" class="text-black animation-menu p-5">{% trans "Login" %}</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <main class="flex-1">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    {% block extra_scripts %}
+    {% endblock %}
+    
+    <!-- Chatbot bubble -->
+    <div class="fixed bottom-5 right-5 w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl cursor-pointer shadow-lg z-50 hover:bg-second transition" onclick="toggleChatbot()">
+        <i class="fas fa-comments"></i>
+    </div>
+
+    <!-- Chatbot window -->
+    <div class="fixed bottom-24 right-5 w-96 h-[75%] bg-white border border-gray-300 rounded-lg shadow-lg flex-col hidden" id="chatbot-window">
+        <div class="bg-primary text-white p-3 rounded-t-lg flex justify-between items-center">
+            <span>{% trans "Chatbot" %}</span>
+            <button onclick="toggleChatbot()" class="text-white border-0 bg-primary text-xl">
+                <i class="fas fa-times cursor-pointer"></i>
+            </button>
+        </div>
+        <div class="p-3 flex-1 overflow-y-auto" id="chatbot-body">
+            <!-- Chat messages will be appended here -->
+        </div>
+        <div class="p-3 border-gray-300">
+            <form id="chatbot-form" class="flex gap-2 items-center">
+                {% csrf_token %}
+                <input type="text" id="chatbot-input" class="flex-1 p-3 border border-gray-300 rounded-lg" placeholder="{% trans "Ask your question here" %}">
+                <button type="submit" id="chatbot-submit" class="p-3 bg-primary text-white rounded-lg border-0 flex items-center justify-center cursor-pointer hover:bg-second transition">
+                    <i class="fas fa-paper-plane text-base"></i>
+                </button>
+            </form>            
+        </div>
+    </div>
+
+    <script>
+        function toggleChatbot() {
+            var chatbotWindow = document.getElementById('chatbot-window');
+            if (chatbotWindow.classList.contains('hidden')) {
+                chatbotWindow.classList.remove('hidden');
+                chatbotWindow.classList.add('flex');
+            } else {
+                chatbotWindow.classList.remove('flex');
+                chatbotWindow.classList.add('hidden');
+            }
+        }
+
+        document.getElementById('chatbot-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var input = document.getElementById('chatbot-input');
+            var message = input.value;
+            if (message.trim() === '') return;
+
+            var chatbotBody = document.getElementById('chatbot-body');
+            var userMessage = document.createElement('div');
+            userMessage.textContent = message;
+            userMessage.className = "bg-gray-200 text-black p-2 rounded-lg mb-2 self-end break-words whitespace-pre-wrap";  // Ajouter des classes Tailwind pour le style
+            chatbotBody.appendChild(userMessage);
+            input.value = '';
+
+            fetch("{% url 'chatbot' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                },
+                body: JSON.stringify({question: message})
+            })
+            .then(response => response.json())
+            .then(data => {
+                var botMessage = document.createElement('div');
+                botMessage.textContent = data.answer;
+                botMessage.className = "text-black p-2 mb-2 break-words whitespace-pre-wrap";  // Ajouter des classes Tailwind pour le style
+                chatbotBody.appendChild(botMessage);
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+    <!-- Footer -->
+    <footer class="bg-second p-4 text-white text-center">
+        <p>&copy; 2024 <a href="https://github.com/SkyGlow95" target="_blank" class="underline text-white">Yann</a>. {% trans "All rights reserved." %}</p>
+    </footer>    
+</body>
+</html>

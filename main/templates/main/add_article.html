@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block title %}
+{% trans "Add Article" %}
+{% endblock %}
+
+{% block content %}
+<h1>{% trans "Add a New Article" %}</h1>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.media }} <!-- Inclure les fichiers média pour CKEditor -->
+    
+    <div>
+        <label for="{{ form.title.id_for_label }}">{{ form.title.label }}</label>
+        {{ form.title }}
+    </div>
+
+    <div>
+        <label for="{{ form.text.id_for_label }}">{{ form.text.label }}</label>
+        {{ form.text }}
+    </div>
+    
+    <button type="submit">{% trans "Add Article" %}</button>
+</form>
+{% endblock %}
