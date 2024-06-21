@@ -33,7 +33,7 @@ Avant de commencer, assurez-vous d'avoir installé les logiciels suivants sur vo
 
 1. **Paramètres Django :**
 
-  Ouvrez le fichier settings.py et assurez-vous d'ajouter votre domaine à ALLOWED_HOSTS et CSRF_TRUSTED_ORIGINS :
+   Ouvrez le fichier settings.py et assurez-vous d'ajouter votre domaine à ALLOWED_HOSTS et CSRF_TRUSTED_ORIGINS :
 
    ```sh
    ALLOWED_HOSTS = ['votre-url.com', 'localhost', '127.0.0.1']
@@ -41,14 +41,14 @@ Avant de commencer, assurez-vous d'avoir installé les logiciels suivants sur vo
 
 2. **Migrations de la base de données :**
 
-  Appliquez les migrations de la base de données :
+   Appliquez les migrations de la base de données :
 
    ```sh
    python manage.py migrate
 
 3. **Collecte des fichiers statiques :**
 
-  Collectez les fichiers statiques :
+   Collectez les fichiers statiques :
 
    ```sh
    python manage.py collectstatic --noinput
@@ -57,16 +57,16 @@ Avant de commencer, assurez-vous d'avoir installé les logiciels suivants sur vo
 
 1. **Lancer le serveur de développement :**
 
-  Pour lancer le serveur de développement, utilisez la commande suivante :
+   Pour lancer le serveur de développement, utilisez la commande suivante :
 
    ```sh
    python manage.py runserver
 
-  Vous devriez maintenant pouvoir accéder au site web à l'adresse http://127.0.0.1:8000/.
+   Vous devriez maintenant pouvoir accéder au site web à l'adresse http://127.0.0.1:8000/.
 
 2. **Déploiement avec Gunicorn :**
 
-  Pour exécuter le projet en production avec Gunicorn, utilisez la commande suivante :
+   Pour exécuter le projet en production avec Gunicorn, utilisez la commande suivante :
 
    ```sh
    gunicorn multilang_site.wsgi:application --bind 0.0.0.0:8000
