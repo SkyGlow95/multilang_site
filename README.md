@@ -79,7 +79,7 @@ Pour déployer ce projet sur Render.com, suivez ces étapes :
 
 2. **Configurez les variables d'environnement nécessaires dans le tableau de bord Render.**
 
-Pour utiliser les outils RAG et LLM vous devez inclure votre clé CHATGPT API (key = OPENAI_API_KEY) et (value = votr_clé)
+   Pour utiliser les outils RAG et LLM vous devez inclure votre clé CHATGPT API (key = OPENAI_API_KEY) et (value = votr_clé)
 
 4. **Ajoutez les commandes de build et de démarrage dans Render :**
    
