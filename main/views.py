@@ -102,43 +102,37 @@ def article_detail(request, article_id):
         content_date = article.published_date
 
         try:
-            response = client.chat.completions.create(
+            system_message = "You are a helpful assistant who provides information based only on the given content from an article and responds in English. Do not use any external information."
+            if language == 'fr':
+                system_message = "Vous êtes un assistant utile qui fournit des informations uniquement basées sur le contenu donné d'un article et répond en français. N'utilisez aucune information externe."
+
+            response = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
                 messages=[
-                    {
-                        "role": "system",
-                        "content": (
-                            "You are a helpful assistant who provides information based only on the given content from an article "
-                            "and responds in French if the user's language is French, otherwise in English. "
-                            "Do not use any external information."
-                        )
-                    },
-                    {
-                        "role": "user",
-                        "content": (
-                            f"Article title: {content_title}\n"
-                            f"Article published date: {content_date}\n"
-                            f"Article content: {context_text}\n"
-                            f"Based on this content, title, and published date only, please answer the following question: {question}\n"
-                            "If the answer is not in the content, say 'The information is not present in the article.'"
-                        )
-                    }
+                    {"role": "system", "content": system_message},
+                    {"role": "user", "content": (
+                        f"Titre de l'article : {content_title}\n"
+                        f"Date de publication de l'article : {content_date}\n"
+                        f"Contenu de l'article : {context_text}\n"
+                        f"Sur la base de ce contenu, du titre et de la date de publication seulement, veuillez répondre à la question suivante : {question}\n"
+                        "Si la réponse n'est pas dans le contenu, dites 'L'information n'est pas présente dans l'article.'"
+                    ) if language == 'fr' else (
+                        f"Article title: {content_title}\n"
+                        f"Article published date: {content_date}\n"
+                        f"Article content: {context_text}\n"
+                        f"Based on this content, title, and published date only, please answer the following question: {question}\n"
+                        "If the answer is not in the content, say 'The information is not present in the article.'"
+                    )}
                 ],
                 max_tokens=150
             )
             response_text = response.choices[0].message.content.strip()
 
             if not response_text or "The information is not present in the article." in response_text:
-                response_text = "Based on the available article, I cannot provide a satisfactory answer to your question."
-                if language == 'fr':
-                    response_text = "D'après l'article disponible, je ne peux pas fournir une réponse satisfaisante à votre question."
+                response_text = "D'après l'article disponible, je ne peux pas fournir une réponse satisfaisante à votre question." if language == 'fr' else "Based on the available article, I cannot provide a satisfactory answer to your question."
         except RateLimitError:
-            response_text = "You have exceeded your quota for the OpenAI API. Please check your plan and billing details."
-            if language == 'fr':
-                response_text = "Vous avez dépassé votre quota pour l'API OpenAI. Veuillez vérifier votre plan et vos détails de facturation."
+            response_text = "Vous avez dépassé votre quota pour l'API OpenAI. Veuillez vérifier votre plan et vos détails de facturation." if language == 'fr' else "You have exceeded your quota for the OpenAI API. Please check your plan and billing details."
         except OpenAIError as e:
-            error_message = f"An error occurred: {e}"
-            if language == 'fr':
-                error_message = f"Une erreur est survenue : {e}"
+            error_message = f"Une erreur est survenue : {e}" if language == 'fr' else f"An error occurred: {e}"
 
     return render(request, 'main/article_detail.html', {'article': article, 'question': question, 'response_text': response_text, 'error_message': error_message})
