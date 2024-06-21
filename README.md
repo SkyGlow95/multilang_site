@@ -81,11 +81,15 @@ Pour déployer ce projet sur Render.com, suivez ces étapes :
 
 3. **Ajoutez les commandes de build et de démarrage dans Render :**
 
-   ```sh
-   Build Command: pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate
+   Build Command:
+   
+   ```sh   
+   pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate
+   
+   Start Command:
 
    ```sh
-   Start Command: gunicorn multilang_site.wsgi:application --bind 0.0.0.0:8000
+   gunicorn multilang_site.wsgi:application --bind 0.0.0.0:8000
 
 ## Contribution
 
