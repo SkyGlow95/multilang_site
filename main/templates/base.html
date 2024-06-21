@@ -44,7 +44,7 @@
             
             <nav class="my-1">
                 <ul class="flex list-none items-center">
-                    <li><a href="{% url 'home' %}" class="text-black no-underline animation-menu p-5">{% trans "Accueil" %}</a></li>
+                    <li><a href="{% url 'home' %}" class="text-black no-underline animation-menu p-5">{% trans "Home" %}</a></li>
                     <li><a href="{% url 'article_list' %}" class="text-black no-underline animation-menu p-5">{% trans "Articles" %}</a></li>
                     {% if user.is_authenticated %}
                     <li><a href="{% url 'add_article' %}" class="text-black no-underline animation-menu p-5">{% trans "Add Article" %}</a></li>

@@ -1,17 +1,44 @@
 {% load i18n %}
+{% load static %}
 
 <!DOCTYPE html>
 <html lang="{% get_current_language as LANGUAGE_CODE %}{{ LANGUAGE_CODE }}">
 <head>
     <meta charset="UTF-8">
     <title>{% trans "Login" %}</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="{% static './css/output.css' %}" rel="stylesheet"> <!-- Inclure votre fichier CSS personnalisé si nécessaire -->
 </head>
-<body>
-    <h2>{% trans "Login" %}</h2>
-    <form method="post" action="{% url 'login' %}">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">{% trans "Login" %}</button>
-    </form>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
+        <h2 class="text-2xl font-bold mb-6 text-center">{% trans "Login" %}</h2>
+        <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            <div class="mb-4">
+                {{ form.username.label_tag }}
+                {{ form.username }}
+                {% for error in form.username.errors %}
+                <p class="text-red-500 text-xs italic">{{ error }}</p>
+                {% endfor %}
+            </div>
+            <div class="mb-4">
+                {{ form.password.label_tag }}
+                {{ form.password }}
+                {% for error in form.password.errors %}
+                <p class="text-red-500 text-xs italic">{{ error }}</p>
+                {% endfor %}
+            </div>
+            <button type="submit" class="w-full bg-primary text-white py-2 rounded hover:bg-second transition">
+                {% trans "Login" %}
+            </button>
+        </form>
+        {% if form.non_field_errors %}
+        <div class="mt-4 text-red-500 text-xs italic">
+            {% for error in form.non_field_errors %}
+            <p>{{ error }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
 </body>
 </html>

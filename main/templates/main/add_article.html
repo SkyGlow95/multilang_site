@@ -7,21 +7,33 @@
 {% endblock %}
 
 {% block content %}
-<h1>{% trans "Add a New Article" %}</h1>
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.media }} <!-- Inclure les fichiers média pour CKEditor -->
-    
-    <div>
-        <label for="{{ form.title.id_for_label }}">{{ form.title.label }}</label>
-        {{ form.title }}
-    </div>
+<div class="min-h-screen flex flex-col items-center justify-center bg-gray-100 pb-5 pt-20">
+    <div class="w-full max-w-2xl bg-white p-8 rounded-lg shadow-md">
+        <h1 class="text-3xl font-bold mb-6 text-center">{% trans "Add a New Article" %}</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.media }} <!-- Inclure les fichiers média pour CKEditor -->
+            
+            <div class="mb-4">
+                <label for="{{ form.title.id_for_label }}" class="block text-gray-700 text-sm font-bold mb-2">{{ form.title.label }}</label>
+                {{ form.title }}
+                {% for error in form.title.errors %}
+                <p class="text-red-500 text-xs italic">{{ error }}</p>
+                {% endfor %}
+            </div>
 
-    <div>
-        <label for="{{ form.text.id_for_label }}">{{ form.text.label }}</label>
-        {{ form.text }}
+            <div class="mb-4">
+                <label for="{{ form.text.id_for_label }}" class="block text-gray-700 text-sm font-bold mb-2">{{ form.text.label }}</label>
+                {{ form.text }}
+                {% for error in form.text.errors %}
+                <p class="text-red-500 text-xs italic">{{ error }}</p>
+                {% endfor %}
+            </div>
+            
+            <button type="submit" class="w-full bg-primary text-white py-2 rounded border-0 cursor-pointer hover:bg-second transition">
+                {% trans "Add Article" %}
+            </button>
+        </form>
     </div>
-    
-    <button type="submit">{% trans "Add Article" %}</button>
-</form>
+</div>
 {% endblock %}

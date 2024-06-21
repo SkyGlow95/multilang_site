@@ -29,13 +29,33 @@ def add_article(request):
         form = ArticleForm()
     return render(request, 'main/add_article.html', {'form': form})
 
+@login_required
+def delete_article(request, article_id):
+    article = get_object_or_404(Article, id=article_id)
+    if request.method == "POST":
+        article.delete()
+        return redirect('article_list')
+    return render(request, 'main/article_list.html', {'article': article})
+
+@login_required
+def edit_article(request, article_id):
+    article = get_object_or_404(Article, id=article_id)
+    if request.method == 'POST':
+        form = ArticleForm(request.POST, request.FILES, instance=article)
+        if form.is_valid():
+            form.save()
+            return redirect('article_list')
+    else:
+        form = ArticleForm(instance=article)
+    return render(request, 'main/edit_article.html', {'form': form, 'article': article})
+
+
 client = OpenAI(
     api_key=settings.OPENAI_API_KEY,
 )
 
 @csrf_exempt
 def chatbot(request):
-    error_message = None
     answer = None
     question = None
     language = get_language()  # Obtenir la langue actuelle
