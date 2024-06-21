@@ -11,13 +11,16 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 import json
 
+# Page d'accueil
 def home(request):
     return render(request, 'main/home.html')
 
+# Liste des articles
 def article_list(request):
     articles = Article.objects.all().order_by('-published_date')
     return render(request, 'main/article_list.html', {'articles': articles})
 
+# Ajouter un nouvel article (seulement pour les utilisateurs connectés)
 @login_required
 def add_article(request):
     if request.method == 'POST':
@@ -29,6 +32,7 @@ def add_article(request):
         form = ArticleForm()
     return render(request, 'main/add_article.html', {'form': form})
 
+# Supprimer un article (seulement pour les utilisateurs connectés)
 @login_required
 def delete_article(request, article_id):
     article = get_object_or_404(Article, id=article_id)
@@ -37,6 +41,7 @@ def delete_article(request, article_id):
         return redirect('article_list')
     return render(request, 'main/article_list.html', {'article': article})
 
+# Modifier un article (seulement pour les utilisateurs connectés)
 @login_required
 def edit_article(request, article_id):
     article = get_object_or_404(Article, id=article_id)
@@ -49,16 +54,17 @@ def edit_article(request, article_id):
         form = ArticleForm(instance=article)
     return render(request, 'main/edit_article.html', {'form': form, 'article': article})
 
-
+# Initialiser le client OpenAI avec la clé API
 client = OpenAI(
     api_key=settings.OPENAI_API_KEY,
 )
 
+# Vue pour le chatbot (permet les requêtes POST sans protection CSRF)
 @csrf_exempt
 def chatbot(request):
     answer = None
     question = None
-    language = get_language()  # Obtenir la langue actuelle
+    language = get_language()
 
     if request.method == 'POST':
         try:
@@ -88,6 +94,7 @@ def chatbot(request):
 
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
+# Vue pour afficher les détails d'un article
 def article_detail(request, article_id):
     article = get_object_or_404(Article, id=article_id)
     response_text = ""
@@ -102,10 +109,12 @@ def article_detail(request, article_id):
         content_date = article.published_date
 
         try:
+            # Déterminer le message système en fonction de la langue
             system_message = "You are a helpful assistant who provides information based only on the given content from an article and responds in English. Do not use any external information."
             if language == 'fr':
                 system_message = "Vous êtes un assistant utile qui fournit des informations uniquement basées sur le contenu donné d'un article et répond en français. N'utilisez aucune information externe."
 
+            # Faire une demande à l'API OpenAI
             response = client.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages=[
@@ -128,6 +137,7 @@ def article_detail(request, article_id):
             )
             response_text = response.choices[0].message.content.strip()
 
+            # Vérifier si la réponse est adéquate
             if not response_text or "The information is not present in the article." in response_text:
                 response_text = "D'après l'article disponible, je ne peux pas fournir une réponse satisfaisante à votre question." if language == 'fr' else "Based on the available article, I cannot provide a satisfactory answer to your question."
         except RateLimitError:

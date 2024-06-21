@@ -2,6 +2,8 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 from .views import article_list, article_detail, add_article, chatbot, home, delete_article, edit_article
 
+# Gestion pour la navigation
+
 urlpatterns = [
     path('', home, name='home'),
     path('chatbot/', chatbot, name='chatbot'),

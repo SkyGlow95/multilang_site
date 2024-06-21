@@ -6,13 +6,17 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %}</title>
+    <!-- Inclusion de la feuille de style générée par Tailwind CSS -->
     <link href="{% static './css/output.css' %}" rel="stylesheet">
+    <!-- Inclusion des icônes FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body class="font-sans flex flex-col bg-bg">
+
     <!-- Navbar -->
     <div class="fixed top-0 left-0 w-full bg-white text-base">
         <div class="container mx-auto flex justify-between items-center">
+            <!-- Formulaire de sélection de langue -->
             <form id="language-form" action="{% url 'set_language' %}" method="post" class="flex items-center">
                 {% csrf_token %}
                 <input name="next" type="hidden" value="{{ request.path }}" />
@@ -25,16 +29,22 @@
                 </select>
             </form>
             
+            <!-- Script pour gérer l'affichage des drapeaux dans le select -->
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
+                    // Sélectionne l'élément du select
                     var select = document.querySelector('select[name="language"]');
+                    // Obtient l'option sélectionnée
                     var selectedOption = select.options[select.selectedIndex];
+                    // Récupère l'URL du drapeau à partir de l'attribut data-flag-url
                     var flagUrl = selectedOption.getAttribute('data-flag-url');
+                    // Applique l'URL du drapeau comme image de fond du select
                     select.style.backgroundImage = 'url(' + flagUrl + ')';
                     select.style.backgroundRepeat = 'no-repeat';
                     select.style.backgroundSize = '2.2em';
                     select.style.backgroundPosition = 'left 4px center';
                     
+                    // Met à jour l'image de fond lorsque l'utilisateur change la langue
                     select.addEventListener('change', function() {
                         var flagUrl = select.options[select.selectedIndex].getAttribute('data-flag-url');
                         select.style.backgroundImage = 'url(' + flagUrl + ')';
@@ -42,6 +52,7 @@
                 });
             </script>            
             
+            <!-- Navigation -->
             <nav class="my-1">
                 <ul class="flex list-none items-center">
                     <li><a href="{% url 'home' %}" class="text-black no-underline animation-menu p-5">{% trans "Home" %}</a></li>
@@ -53,11 +64,6 @@
                         <form id="logout-form" action="{% url 'logout' %}" method="post" class="hidden">
                             {% csrf_token %}
                         </form>
-                        <script>
-                            function submitLogoutForm() {
-                                document.getElementById('logout-form').submit();
-                            }
-                        </script>
                     </li>      
                     {% else %}
                     <li><a href="{% url 'login' %}" class="text-black animation-menu p-5">{% trans "Login" %}</a></li>
@@ -67,6 +73,7 @@
         </div>
     </div>
 
+    <!-- Contenu principal -->
     <main class="flex-1">
         {% block content %}
         {% endblock %}
@@ -75,12 +82,12 @@
     {% block extra_scripts %}
     {% endblock %}
     
-    <!-- Chatbot bubble -->
+    <!-- Bulle du chatbot -->
     <div class="fixed bottom-5 right-5 w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl cursor-pointer shadow-lg z-50 hover:bg-second transition" onclick="toggleChatbot()">
         <i class="fas fa-comments"></i>
     </div>
 
-    <!-- Chatbot window -->
+    <!-- Fenêtre du chatbot -->
     <div class="fixed bottom-24 right-5 w-96 h-[75%] bg-white border border-gray-300 rounded-lg shadow-lg flex-col hidden" id="chatbot-window">
         <div class="bg-primary text-white p-3 rounded-t-lg flex justify-between items-center">
             <span>{% trans "Chatbot" %}</span>
@@ -89,7 +96,7 @@
             </button>
         </div>
         <div class="p-3 flex-1 overflow-y-auto" id="chatbot-body">
-            <!-- Chat messages will be appended here -->
+            <!-- Les messages du chat seront ajoutés ici -->
         </div>
         <div class="p-3 border-gray-300">
             <form id="chatbot-form" class="flex gap-2 items-center">
@@ -102,7 +109,9 @@
         </div>
     </div>
 
+    <!-- Script pour gérer le comportement du chatbot -->
     <script>
+        // Fonction pour afficher ou masquer la fenêtre du chatbot
         function toggleChatbot() {
             var chatbotWindow = document.getElementById('chatbot-window');
             if (chatbotWindow.classList.contains('hidden')) {
@@ -114,19 +123,22 @@
             }
         }
 
+        // Gestionnaire d'événements pour le formulaire du chatbot
         document.getElementById('chatbot-form').addEventListener('submit', function(e) {
             e.preventDefault();
             var input = document.getElementById('chatbot-input');
             var message = input.value;
             if (message.trim() === '') return;
 
+            // Ajouter le message de l'utilisateur dans la fenêtre du chatbot
             var chatbotBody = document.getElementById('chatbot-body');
             var userMessage = document.createElement('div');
             userMessage.textContent = message;
-            userMessage.className = "bg-gray-200 text-black p-2 rounded-lg mb-2 self-end break-words whitespace-pre-wrap";  // Ajouter des classes Tailwind pour le style
+            userMessage.className = "bg-gray-200 text-black p-2 rounded-lg mb-2 self-end break-words whitespace-pre-wrap";
             chatbotBody.appendChild(userMessage);
             input.value = '';
 
+            // Envoyer le message à l'API du chatbot
             fetch("{% url 'chatbot' %}", {
                 method: 'POST',
                 headers: {
@@ -137,14 +149,16 @@
             })
             .then(response => response.json())
             .then(data => {
+                // Ajouter la réponse du chatbot dans la fenêtre du chatbot
                 var botMessage = document.createElement('div');
                 botMessage.textContent = data.answer;
-                botMessage.className = "text-black p-2 mb-2 break-words whitespace-pre-wrap";  // Ajouter des classes Tailwind pour le style
+                botMessage.className = "text-black p-2 mb-2 break-words whitespace-pre-wrap";
                 chatbotBody.appendChild(botMessage);
             })
             .catch(error => console.error('Error:', error));
         });
     </script>
+
     <!-- Footer -->
     <footer class="bg-second p-4 text-white text-center">
         <p>&copy; 2024 <a href="https://github.com/SkyGlow95" target="_blank" class="underline text-white">Yann</a>. {% trans "All rights reserved." %}</p>
