@@ -2,6 +2,10 @@
 
 Ce projet est un site web multilingue développé avec Django. Il inclut des fonctionnalités comme un éditeur de texte enrichi (CKEditor) et une intégration avec l'API OpenAI.
 
+## WARNING
+
+Ce projet est à but lucratif la clé Django est donc afficher publiquement pour celui-ci.
+
 ## Prérequis
 
 Avant de commencer, assurez-vous d'avoir installé les logiciels suivants sur votre machine :
