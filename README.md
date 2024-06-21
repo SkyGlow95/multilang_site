@@ -79,12 +79,14 @@ Pour déployer ce projet sur Render.com, suivez ces étapes :
 
 2. **Configurez les variables d'environnement nécessaires dans le tableau de bord Render.**
 
-3. **Ajoutez les commandes de build et de démarrage dans Render :**
+Pour utiliser les outils RAG et LLM vous devez inclure votre clé CHATGPT API (key = OPENAI_API_KEY) et (value = votr_clé)
+
+4. **Ajoutez les commandes de build et de démarrage dans Render :**
    
    ```sh   
    pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate```
 
-4. **Ajoutez les commandes de démarrage dans Render :**
+5. **Ajoutez les commandes de démarrage dans Render :**
 
    ```sh
    gunicorn multilang_site.wsgi:application --bind 0.0.0.0:8000
