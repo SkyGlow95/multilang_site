@@ -62,7 +62,7 @@ Avant de commencer, assurez-vous d'avoir installé les logiciels suivants sur vo
    ```sh
    python manage.py runserver
 
-   Vous devriez maintenant pouvoir accéder au site web à l'adresse http://127.0.0.1:8000/.
+Vous devriez maintenant pouvoir accéder au site web à l'adresse http://127.0.0.1:8000/.
 
 2. **Déploiement avec Gunicorn :**
 
@@ -83,6 +83,8 @@ Pour déployer ce projet sur Render.com, suivez ces étapes :
 
    ```sh
    Build Command: pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate
+
+   ```sh
    Start Command: gunicorn multilang_site.wsgi:application --bind 0.0.0.0:8000
 
 ## Contribution
