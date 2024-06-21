@@ -106,7 +106,7 @@ def article_detail(request, article_id):
             if language == 'fr':
                 system_message = "Vous êtes un assistant utile qui fournit des informations uniquement basées sur le contenu donné d'un article et répond en français. N'utilisez aucune information externe."
 
-            response = openai.ChatCompletion.create(
+            response = client.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages=[
                     {"role": "system", "content": system_message},
