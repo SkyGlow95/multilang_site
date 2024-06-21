@@ -20,12 +20,14 @@ Avant de commencer, assurez-vous d'avoir installé les logiciels suivants sur vo
    
 2. **Créer et activer un environnement virtuel :**
 
-  python -m venv venv
-  source venv/bin/activate  # Sur Windows, utilisez `venv\Scripts\activate`
+   ```sh
+   python -m venv venv
+   source venv/bin/activate  # Sur Windows, utilisez `venv\Scripts\activate`
 
 3. **Installer les dépendances :**
 
-  pip install -r requirements.txt
+   ```sh
+   pip install -r requirements.txt
 
 ## Configuration
 
@@ -33,20 +35,23 @@ Avant de commencer, assurez-vous d'avoir installé les logiciels suivants sur vo
 
   Ouvrez le fichier settings.py et assurez-vous d'ajouter votre domaine à ALLOWED_HOSTS et CSRF_TRUSTED_ORIGINS :
 
-  ALLOWED_HOSTS = ['votre-url.com', 'localhost', '127.0.0.1']
-  CSRF_TRUSTED_ORIGINS = ['https://votre-url.com']
+   ```sh
+   ALLOWED_HOSTS = ['votre-url.com', 'localhost', '127.0.0.1']
+   CSRF_TRUSTED_ORIGINS = ['https://votre-url.com']
 
 2. **Migrations de la base de données :**
 
   Appliquez les migrations de la base de données :
 
-  python manage.py migrate
+   ```sh
+   python manage.py migrate
 
 3. **Collecte des fichiers statiques :**
 
   Collectez les fichiers statiques :
 
-  python manage.py collectstatic --noinput
+   ```sh
+   python manage.py collectstatic --noinput
 
 ## Exécution du projet
 
@@ -54,7 +59,8 @@ Avant de commencer, assurez-vous d'avoir installé les logiciels suivants sur vo
 
   Pour lancer le serveur de développement, utilisez la commande suivante :
 
-  python manage.py runserver
+   ```sh
+   python manage.py runserver
 
   Vous devriez maintenant pouvoir accéder au site web à l'adresse http://127.0.0.1:8000/.
 
@@ -62,7 +68,8 @@ Avant de commencer, assurez-vous d'avoir installé les logiciels suivants sur vo
 
   Pour exécuter le projet en production avec Gunicorn, utilisez la commande suivante :
 
-  gunicorn multilang_site.wsgi:application --bind 0.0.0.0:8000
+   ```sh
+   gunicorn multilang_site.wsgi:application --bind 0.0.0.0:8000
 
 ## Déploiement sur Render.com :
 
@@ -74,8 +81,9 @@ Pour déployer ce projet sur Render.com, suivez ces étapes :
 
 3. **Ajoutez les commandes de build et de démarrage dans Render :**
 
-  Build Command: pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate
-  Start Command: gunicorn multilang_site.wsgi:application --bind 0.0.0.0:8000
+   ```sh
+   Build Command: pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate
+   Start Command: gunicorn multilang_site.wsgi:application --bind 0.0.0.0:8000
 
 ## Contribution
 
