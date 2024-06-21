@@ -159,4 +159,7 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-OPENAI_API_KEY = os.getenv('OPENAI_API_KEY', 'openapikey')
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+
+if OPENAI_API_KEY is None:
+    raise ValueError("No OPENAI_API_KEY set for Django application")
